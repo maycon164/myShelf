@@ -1,15 +1,26 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 
 @Injectable()
 export class BooksService {
-  create(createBookDto: CreateBookDto) {
-    return 'This action adds a new book';
+
+  constructor(private readonly prisma: PrismaService) { }
+
+  async create(book: CreateBookDto) {
+    const bookCreated = await this.prisma.book.create({
+      data: CreateBookDto.toSave(book)
+    });
+
+    return bookCreated;
   }
 
-  findAll() {
-    return `This action returns all books`;
+  async findAll() {
+
+    const books = await this.prisma.book.findMany();
+    if (books.length == 0) { message: 'aqui ainda nao tem nada preguicoso' }
+    return books;
   }
 
   findOne(id: number) {

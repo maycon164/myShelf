@@ -16,3 +16,30 @@ model User {
   email    String  @unique
   password String?
 }
+
+model Book {
+  id                Int       @id @default(autoincrement())
+  title             String
+  author            String
+  genre             String
+  description       String
+  yearOfPublication String
+  startReading      DateTime?
+  endOfReading      DateTime?
+  chapters          chapter[]
+  numberOfChapters  Int?
+  price             Float
+  opinion           String    @default("???")
+  whyRead           String
+  links             String[]
+  image             String?
+  indication        String[]
+}
+
+model chapter {
+  id          Int    @id @default(autoincrement())
+  title       String
+  description String
+  Book        Book?  @relation(fields: [bookId], references: [id])
+  bookId      Int?
+}
