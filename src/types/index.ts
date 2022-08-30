@@ -3,6 +3,12 @@ class Payload {
     password: string
 }
 
+interface Filter {
+    search?: string
+    genre?: string
+}
+
 export {
+    Filter,
     Payload
 }

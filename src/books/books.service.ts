@@ -1,6 +1,7 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateBookDto } from './dto/create-book.dto';
+import { Filter } from 'src/types';
+import { ChapterDTO, CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 
 @Injectable()
@@ -16,15 +17,46 @@ export class BooksService {
     return bookCreated;
   }
 
-  async findAll() {
+  async addChapter(bookId: number, chapter: ChapterDTO) {
+    console.log(bookId);
+    const chapterAdded = await this.prisma.chapter.create({
+      data: {
+        ...chapter,
+        bookId: +bookId
+      }
+    });
 
-    const books = await this.prisma.book.findMany();
-    if (books.length == 0) { message: 'aqui ainda nao tem nada preguicoso' }
-    return books;
+    return chapterAdded;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} book`;
+  async findAll(filter: Filter) {
+    const { search, genre } = filter;
+
+    const books = await this.prisma.book.findMany({
+      where: {
+        title: {
+          equals: search
+        },
+        genre: {
+          equals: genre
+        }
+      }
+    });
+
+    if (books.length == 0) { message: 'aqui ainda nao tem nada preguicoso' }
+
+    return books;
+
+  }
+
+  async findOne(bookId: number) {
+    const book = await this.prisma.book.findFirst({
+      where: { id: bookId },
+      include: {
+        chapters: true
+      }
+    })
+    return book;
   }
 
   update(id: number, updateBookDto: UpdateBookDto) {

@@ -23,6 +23,11 @@ export class CreateBookDto {
     }
 }
 
+export class ChapterDTO {
+    title: string
+    description: string
+}
+
 enum Genre {
     'Action',
     'Fantasy',
