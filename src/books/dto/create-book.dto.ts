@@ -1,3 +1,5 @@
+import { Genre } from "src/types"
+
 export class BookDTO {
     title: string
     author: string
@@ -27,13 +29,3 @@ export class ChapterDTO {
     title: string
     description: string
 }
-
-enum Genre {
-    'Action',
-    'Fantasy',
-    'History',
-    'Drama',
-    'Science-Fiction',
-    'Romance'
-}
-

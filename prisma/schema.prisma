@@ -43,3 +43,16 @@ model chapter {
   Book        Book?  @relation(fields: [bookId], references: [id])
   bookId      Int?
 }
+
+model games {
+  id          Int      @id @default(autoincrement())
+  title       String
+  genre       String
+  description String
+  whyToPlay   String
+  platform    String
+  medias      String[]
+  indication  String[]
+  links       String[]
+  notes       Json[]
+}

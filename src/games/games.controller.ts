@@ -1,15 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { GamesService } from './games.service';
-import { CreateGameDto } from './dto/create-game.dto';
-import { UpdateGameDto } from './dto/update-game.dto';
+import { GameDTO } from './dto/gameDTO';
+import { storage } from 'src/types';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('games')
 export class GamesController {
-  constructor(private readonly gamesService: GamesService) {}
+  constructor(private readonly gamesService: GamesService) { }
 
   @Post()
-  create(@Body() createGameDto: CreateGameDto) {
-    return this.gamesService.create(createGameDto);
+  create(
+    @Body() createGameDto: GameDTO
+  ) {
+    return this.gamesService.insertGame(createGameDto);
   }
 
   @Get()
@@ -18,13 +21,26 @@ export class GamesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(
+    @Param('id') id: string
+  ) {
     return this.gamesService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateGameDto: UpdateGameDto) {
-    return this.gamesService.update(+id, updateGameDto);
+  @Put(':id')
+  @UseInterceptors(FileInterceptor('file', storage))
+  update(
+    @Param('id') id: string,
+    @Body() game: GameDTO,
+    @UploadedFile() file: Express.Multer.File
+  ) {
+
+    if (file) {
+      let mediaUrl = `http://localhost:3000/${file.filename}`;
+      game.medias = [mediaUrl];
+    }
+
+    return this.gamesService.update(+id, game);
   }
 
   @Delete(':id')

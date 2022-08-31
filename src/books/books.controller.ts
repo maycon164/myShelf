@@ -1,22 +1,8 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseInterceptors, UploadedFile, Put } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { v4 as uuidv4 } from 'uuid';
-import { diskStorage } from 'multer';
+import { storage } from 'src/types';
 import { BooksService } from './books.service';
 import { ChapterDTO, BookDTO } from './dto/create-book.dto';
-import { UpdateBookDto } from './dto/update-book.dto';
-
-const storage = {
-  storage: diskStorage({
-    destination: './uploads',
-
-    filename: (req, file, cb) => {
-      const randomName = uuidv4() + file.originalname;
-      cb(null, randomName);
-    }
-
-  })
-}
 @Controller('books')
 export class BooksController {
   constructor(private readonly booksService: BooksService) { }
