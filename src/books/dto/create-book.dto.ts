@@ -1,4 +1,4 @@
-export class CreateBookDto {
+export class BookDTO {
     title: string
     author: string
     genre: Genre
@@ -14,7 +14,7 @@ export class CreateBookDto {
     image?: string
     indication?: string[]
 
-    static toSave(dto?: CreateBookDto) {
+    static toSave(dto?: BookDTO) {
         const obj: any = { ...dto }
         //obj.yearOfPublication = new Date(obj.year).getTime()
         obj.yearOfPublication = dto.year

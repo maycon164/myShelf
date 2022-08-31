@@ -1,17 +1,18 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Filter } from 'src/types';
-import { ChapterDTO, CreateBookDto } from './dto/create-book.dto';
+import { ChapterDTO, BookDTO } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
+import { Book } from './entities/book.entity';
 
 @Injectable()
 export class BooksService {
 
   constructor(private readonly prisma: PrismaService) { }
 
-  async create(book: CreateBookDto) {
+  async create(book: BookDTO) {
     const bookCreated = await this.prisma.book.create({
-      data: CreateBookDto.toSave(book)
+      data: BookDTO.toSave(book)
     });
 
     return bookCreated;
@@ -59,8 +60,12 @@ export class BooksService {
     return book;
   }
 
-  update(id: number, updateBookDto: UpdateBookDto) {
-    return `This action updates a #${id} book`;
+  async update(bookId: number, book: BookDTO) {
+    let bookUpdated = await this.prisma.book.update({
+      where: { id: bookId },
+      data: BookDTO.toSave(book)
+    })
+    return bookUpdated;
   }
 
   remove(id: number) {
