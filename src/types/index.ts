@@ -18,7 +18,8 @@ enum Genre {
     'Drama',
     'Science-Fiction',
     'Romance',
-    'Moba'
+    'Moba',
+    'Survival-Horror'
 }
 
 const storage = {
@@ -31,7 +32,7 @@ const storage = {
     })
 }
 
-class Note {
+class NoteDTO {
     title: string
     text: string
     date: string
@@ -41,7 +42,7 @@ export {
     Filter,
     Payload,
     Genre,
-    Note,
+    NoteDTO,
     storage
 }
 

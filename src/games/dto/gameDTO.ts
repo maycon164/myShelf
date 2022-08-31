@@ -1,4 +1,4 @@
-import { Genre, Note } from "src/types"
+import { Genre, NoteDTO } from "src/types"
 
 export class GameDTO {
     title: string
@@ -9,10 +9,13 @@ export class GameDTO {
     medias?: string[]
     indication?: string[]
     links?: string[]
-    //notes?: Note[]
-    notes: string[]
+    notes: NoteDTO[]
+
     static toSave(game: GameDTO) {
-        return { ...game }
+        return {
+            ...game,
+            notes: JSON.stringify(game.notes)
+        }
     }
 }
 

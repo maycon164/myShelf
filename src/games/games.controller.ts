@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Param, Delete, Put, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { GamesService } from './games.service';
 import { GameDTO } from './dto/gameDTO';
-import { storage } from 'src/types';
+import { NoteDTO, storage } from 'src/types';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('games')
@@ -22,7 +22,7 @@ export class GamesController {
 
   @Get(':id')
   findOne(
-    @Param('id') id: string
+    @Param('id') id: number
   ) {
     return this.gamesService.findOne(+id);
   }
@@ -41,6 +41,14 @@ export class GamesController {
     }
 
     return this.gamesService.update(+id, game);
+  }
+
+  @Post(':id/notes')
+  async addNote(
+    @Param('id') gameId: number,
+    @Body() note: NoteDTO
+  ) {
+    return await this.gamesService.addNote(+gameId, note);
   }
 
   @Delete(':id')
