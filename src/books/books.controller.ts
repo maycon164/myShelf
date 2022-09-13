@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseInterceptors, UploadedFile, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Query, UseInterceptors, UploadedFile, Put } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { storage } from 'src/types';
 import { BooksService } from './books.service';
@@ -16,12 +16,22 @@ export class BooksController {
     return this.booksService.create(createBookDto);
   }
 
-  @Post(":id")
+  @Post("/:bookId/chapter")
   addChapter(
     @Body() chapter: ChapterDTO,
-    @Param('id') id: number
+    @Param('bookId') id: number
   ) {
     return this.booksService.addChapter(id, chapter);
+  }
+
+  @Put("/:bookId/chapter/:chapterId")
+  async editChpater(
+    @Param('bookId') bookId: number,
+    @Param('chapterId') chapterId: number,
+    @Body() chapter: ChapterDTO,
+  ) {
+    const editedChapter = await this.booksService.editChapter(+bookId, +chapterId, chapter);
+    return editedChapter;
   }
 
   @Get()

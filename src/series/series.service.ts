@@ -1,22 +1,42 @@
 import { Injectable } from '@nestjs/common';
-import { CreateSeriesDto } from './dto/create-series.dto';
-import { UpdateSeriesDto } from './dto/update-series.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { EpisodioDTO, SeriesDTO } from './dto/serieDTO';
 
 @Injectable()
 export class SeriesService {
-  create(createSeriesDto: CreateSeriesDto) {
-    return 'This action adds a new series';
+
+  constructor(private readonly prisma: PrismaService) { }
+
+  async create(serieDTO: SeriesDTO) {
+    const createdSerie = await this.prisma.series.create({
+      data: SeriesDTO.toSave(serieDTO)
+    })
+
+    return createdSerie;
   }
 
-  findAll() {
-    return `This action returns all series`;
+  async addEpisodio(serieID: number, episodio: EpisodioDTO) {
+
+    episodio.serieID = serieID;
+
+    const addedEpisodio = await this.prisma.episodio.create({
+      data: EpisodioDTO.toSave(episodio)
+    })
+
+    return addedEpisodio;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} series`;
+  async findAll() {
+    const series = await this.prisma.series.findMany({});
+    return series;
   }
 
-  update(id: number, updateSeriesDto: UpdateSeriesDto) {
+  async findOne(id: number) {
+    const serie = await this.prisma.series.findFirst({ where: { id: id } });
+    return serie;
+  }
+
+  update(id: number, serieDTO: SeriesDTO) {
     return `This action updates a #${id} series`;
   }
 

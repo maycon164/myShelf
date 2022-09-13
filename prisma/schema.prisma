@@ -56,3 +56,26 @@ model games {
   links       String[]
   notes       Json[]
 }
+
+model series {
+  id          Int        @id @default(autoincrement())
+  title       String
+  genre       String
+  seasons     Int
+  description String?
+  episodios   episodio[]
+  image       String?
+  indication  String[]
+  links       String[]
+  notes       Json[]
+}
+
+model episodio {
+  id       Int     @id @default(autoincrement())
+  series   series? @relation(fields: [seriesId], references: [id])
+  seriesId Int?
+  title    String
+  numOfEp  Int
+  notes    Json[]
+  watched  String?
+}

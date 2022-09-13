@@ -60,6 +60,16 @@ export class BooksService {
     return book;
   }
 
+  async editChapter(bookId: number, chapterId: number, chapter: ChapterDTO) {
+    const editedChapter = await this.prisma.chapter.update({
+      where: {
+        id: bookId,
+      },
+      data: chapter,
+    })
+    return editedChapter;
+  }
+
   async update(bookId: number, book: BookDTO) {
     let bookUpdated = await this.prisma.book.update({
       where: { id: bookId },
